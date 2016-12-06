@@ -1,0 +1,9 @@
+#!/bin/bash
+
+buildLine="-------------------- BUILD --------------------"
+runLine="--------------------- RUN ---------------------" 
+
+while true; do
+    find -regextype posix-extended -regex "\./(src|test|app).*|.*\.cabal" |
+        entr -d sh -c "echo $buildLine && stack build && echo $runLine && stack \"$1\" \"$2\""
+done
