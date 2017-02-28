@@ -1,9 +1,14 @@
 #!/bin/bash
 
-runLine="\n--------------------- RUN ---------------------\n\n" 
-doneLine="\n--------------------- DONE --------------------\n\n" 
+runLine="\n--------------------- RUN ---------------------\n\n"
+doneLine="\n--------------------- DONE --------------------\n\n"
+
+args=("${@/#/\"}")
+args=("${args[@]/%/\"}")
+
+cmd="stack build && printf '$runLine' && stack ${args[@]} && printf '$doneLine'"
 
 while true; do
     find -regextype posix-extended -regex "\./(src|test|app).*|.*\.cabal" |
-        entr -d sh -c "stack build && printf \"$runLine\" && stack \"$1\" \"$2\" && printf \"$doneLine\""
+        entr -d sh -c "$cmd"
 done
